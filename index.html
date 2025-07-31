@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Congratulations! You're Selected</title>
+  <style>
+    body {
+      background: linear-gradient(to bottom right, #f9fafb, #e3f2fd);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #333;
+      text-align: center;
+      padding: 50px 20px;
+    }
+    h1 {
+      font-size: 28px;
+      color: #2e7d32;
+    }
+    .card {
+      max-width: 500px;
+      margin: 30px auto;
+      padding: 25px;
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .btn {
+      display: none;
+      background-color: #ff6f00;
+      color: white;
+      padding: 15px 35px;
+      font-size: 18px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 30px;
+      transition: background 0.3s ease;
+    }
+    .btn:hover {
+      background-color: #e65100;
+    }
+    #geoMessage, #countdown, #warning {
+      margin-top: 15px;
+    }
+    #warning {
+      color: red;
+      font-weight: bold;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>🎉 You’ve Been Selected!</h1>
+    <div id="geoMessage">Verifying location...</div>
+    <div id="countdown">Unlocking your reward in <span id="timer">5</span> seconds...</div>
+    <a id="continueBtn" href="https://otieu.com/4/9647806" target="_blank">
+      <button class="btn">Claim Reward Now</button>
+    </a>
+    <div id="warning">Access Denied: Suspicious behavior detected.</div>
+  </div>
+
+  <!-- Optional tracking pixel (e.g., BeMob) -->
+  <img src="https://wcyhr.bemobtrcks.com/go/36539d0e-85b4-47d3-93f1-24c74d4d9263" width="1" height="1" style="display:none;" />
+
+  <script>
+    // Geo
+    fetch('https://ipapi.co/json/')
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("geoMessage").textContent = "Special deal available for " + data.country_name + "!";
+      })
+      .catch(() => {
+        document.getElementById("geoMessage").textContent = "Welcome!";
+      });
+
+    // Bot Detection
+    const botUA = /bot|crawl|spider|crawling|headless|phantom|slurp/i;
+    const isBot = botUA.test(navigator.userAgent.toLowerCase()) || navigator.webdriver;
+
+    if (isBot) {
+      document.getElementById("geoMessage").style.display = "none";
+      document.getElementById("countdown").style.display = "none";
+      document.getElementById("warning").style.display = "block";
+    } else {
+      let timeLeft = 5;
+      const timer = document.getElementById("timer");
+      const btn = document.querySelector(".btn");
+
+      const interval = setInterval(() => {
+        timeLeft--;
+        timer.textContent = timeLeft;
+        if (timeLeft <= 0) {
+          clearInterval(interval);
+          document.getElementById("countdown").style.display = "none";
+          btn.style.display = "inline-block";
+        }
+      }, 1000);
+    }
+  </script>
+</body>
+</html>
